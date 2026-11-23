@@ -1,0 +1,4 @@
+# Les deux bibliothèques utilisées par l'API, avec une version fixe
+# pour que l'installation soit toujours la même.
+flask==3.0.3
+redis==5.0.8

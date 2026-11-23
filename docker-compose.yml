@@ -1,0 +1,91 @@
+# =============================================================================
+# TP COMPOSE — front + API + base de données
+#
+# Lancement :  docker compose up -d --build
+# Arrêt     :  docker compose down
+#
+# Trois services, un seul fichier. Les mots de passe ne sont PAS écrits ici :
+# ils viennent du fichier .env (voir .env.example).
+# =============================================================================
+name: tp-compose-simple
+
+services:
+  # ---------------------------------------------------------------------------
+  # 1) LA BASE DE DONNÉES — Redis.
+  #    Elle garde une toute petite valeur : un compteur de visites.
+  #    Aucun port n'est ouvert vers l'extérieur : seul l'API peut lui parler.
+  # ---------------------------------------------------------------------------
+  db:
+    image: redis:7-alpine
+    container_name: tp-simple-db
+    restart: unless-stopped
+    # On démarre Redis avec le mot de passe venu de l'environnement.
+    command: ["redis-server", "--requirepass", "${REDIS_PASSWORD:-mot_de_passe_factice}"]
+    environment:
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-mot_de_passe_factice}
+    networks:
+      - reseau-interne
+    # Docker vérifie régulièrement que la base répond bien.
+    healthcheck:
+      test: ["CMD-SHELL", "redis-cli -a $$REDIS_PASSWORD --no-auth-warning ping"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+
+  # ---------------------------------------------------------------------------
+  # 2) L'API — Python + Flask.
+  #    Elle lit et écrit dans la base, puis renvoie du JSON au front.
+  #    Elle n'est pas exposée non plus : on y accède à travers le front.
+  # ---------------------------------------------------------------------------
+  api:
+    build: ./api
+    container_name: tp-simple-api
+    restart: unless-stopped
+    environment:
+      REDIS_HOST: db # "db" = le nom du service ci-dessus (DNS interne Docker)
+      REDIS_PORT: "6379"
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-mot_de_passe_factice}
+    depends_on:
+      db:
+        condition: service_healthy # on attend que la base réponde
+    networks:
+      - reseau-interne
+    healthcheck:
+      test:
+        [
+          "CMD",
+          "python",
+          "-c",
+          "import urllib.request; urllib.request.urlopen('http://127.0.0.1:5000/api/health')",
+        ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+  # ---------------------------------------------------------------------------
+  # 3) LE FRONT — Nginx + une page HTML.
+  #    C'est le SEUL service ouvert sur votre machine (port 8080).
+  #    La page appelle /api/hello ; Nginx transmet l'appel à l'API.
+  # ---------------------------------------------------------------------------
+  front:
+    build: ./front
+    container_name: tp-simple-front
+    restart: unless-stopped
+    depends_on:
+      api:
+        condition: service_healthy
+    networks:
+      - reseau-interne
+    ports:
+      - "${FRONT_PORT:-8080}:80" # http://localhost:8080
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1/"]
+      interval: 15s
+      timeout: 3s
+      retries: 5
+
+# Un réseau privé : les 3 services se voient entre eux, pas depuis l'extérieur.
+networks:
+  reseau-interne:
+    name: tp-compose-simple-reseau

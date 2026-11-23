@@ -1,0 +1,12 @@
+# --- Configuration locale : jamais envoyée sur GitHub ------------------------
+.env
+
+# --- Python ----------------------------------------------------------------
+__pycache__/
+*.pyc
+
+# --- Systèmes et éditeurs ---------------------------------------------------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

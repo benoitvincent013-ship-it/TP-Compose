@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>TP Compose — Hello World</title>
+
+    <!-- Le style est directement dans la page : un seul fichier à lire. -->
+    <style>
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: #f4f1ea;
+        color: #23201c;
+        font-family: system-ui, "Segoe UI", Arial, sans-serif;
+      }
+      main {
+        width: min(520px, 90vw);
+        padding: 2rem;
+        background: #fff;
+        border: 1px solid #ddd6ca;
+        border-radius: 14px;
+        box-shadow: 0 10px 30px rgba(0, 0, 0, 0.06);
+        text-align: center;
+      }
+      h1 {
+        margin: 0 0 0.4rem;
+        font-size: 1.8rem;
+      }
+      .chemin {
+        margin: 0 0 1.5rem;
+        color: #7a6f61;
+        font-size: 0.85rem;
+      }
+      button {
+        padding: 0.7rem 1.2rem;
+        border: none;
+        border-radius: 999px;
+        background: #23201c;
+        color: #fff;
+        font-size: 1rem;
+        cursor: pointer;
+      }
+      button:hover {
+        background: #3a332c;
+      }
+      #resultat {
+        margin: 1.5rem 0 0;
+        padding: 1rem;
+        border-radius: 10px;
+        background: #f4f1ea;
+        font-size: 0.95rem;
+        line-height: 1.5;
+      }
+    </style>
+  </head>
+
+  <body>
+    <main>
+      <h1>Hello World</h1>
+      <p class="chemin">Front (Nginx) → API (Flask) → Base (Redis)</p>
+
+      <button id="bouton">Appeler l'API</button>
+
+      <!-- C'est ici que la réponse de l'API sera affichée. -->
+      <p id="resultat">Chargement…</p>
+    </main>
+
+    <script>
+      // On récupère les deux éléments de la page dont on a besoin.
+      const bouton = document.getElementById("bouton");
+      const resultat = document.getElementById("resultat");
+
+      // Cette fonction appelle notre API et affiche sa réponse.
+      async function appelerApi() {
+        try {
+          // Pas d'adresse complète : "/api/hello" est sur le même site,
+          // et c'est Nginx qui transmet l'appel à l'API.
+          const reponse = await fetch("/api/hello");
+          const donnees = await reponse.json();
+
+          resultat.textContent =
+            donnees.message + " — visites en base : " + donnees.visites;
+        } catch (erreur) {
+          resultat.textContent =
+            "Erreur : l'API ne répond pas. Vérifiez « docker compose ps ».";
+        }
+      }
+
+      bouton.addEventListener("click", appelerApi);
+
+      // On appelle l'API une première fois dès l'ouverture de la page.
+      appelerApi();
+    </script>
+  </body>
+</html>
