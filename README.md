@@ -229,18 +229,21 @@ vérifications automatiques de Docker (le « healthcheck ») : c'est normal.
 | L'API | `curl http://localhost:8080/api/hello` | `captures/3-curl.png` |
 | Les logs | `docker compose logs api` | `captures/4-logs.png` |
 
-Une fois les images ajoutées, affichez-les dans ce README en décommentant le
-bloc ci-dessous (remplacez `8080` par votre port dans les adresses si besoin) :
+Les quatre captures sont **déjà présentes** dans `captures/` et affichées
+ci-dessous. Remplacez-les par les vôtres si vous voulez montrer votre propre
+machine (gardez les mêmes noms de fichiers).
 
-```markdown
-![docker compose ps](captures/1-docker-compose-ps.png)
+![docker compose ps — les trois services sont healthy](captures/1-docker-compose-ps.png)
 
-![page du navigateur](captures/2-navigateur.png)
+![la page du navigateur affiche le message et le compteur](captures/2-navigateur.png)
 
-![curl sur /api/hello](captures/3-curl.png)
+![curl sur /api/hello — le compteur augmente à chaque appel](captures/3-curl.png)
 
-![logs de l'API](captures/4-logs.png)
-```
+![les logs de l'API montrent les appels reçus](captures/4-logs.png)
+
+> Ces captures ont été faites avec `FRONT_PORT=8081`, car le port 8080 était
+déjà occupé sur le poste de test. Chez vous, utilisez le port indiqué dans
+votre `.env` (8080 par défaut).
 
 ## 9. Comment ça marche (en 4 idées)
 

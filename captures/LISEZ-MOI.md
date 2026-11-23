@@ -2,6 +2,10 @@
 
 C'est ici que vous déposez vos preuves pour la remise.
 
+> Les quatre captures ci-dessous sont **déjà fournies** (elles sont affichées
+> dans le `README.md`). Vous pouvez les remplacer par les vôtres : gardez les
+> mêmes noms de fichiers.
+
 ## Noms de fichiers attendus
 
 | Fichier | Ce qu'il doit montrer |
