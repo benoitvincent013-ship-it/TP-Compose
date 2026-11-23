@@ -241,9 +241,15 @@ machine (gardez les mêmes noms de fichiers).
 
 ![les logs de l'API montrent les appels reçus](captures/4-logs.png)
 
+> **Transparence sur les captures** : `1-docker-compose-ps.png`, `3-curl.png` et
+> `4-logs.png` ont été générées à partir des **sorties réelles** des commandes,
+> recopiées dans une image (fond sombre, police monospace). Ce ne sont donc pas
+> des copies d'écran d'une fenêtre de terminal. Seule la capture
+> `2-navigateur.png` est une vraie capture du navigateur.
+>
 > Ces captures ont été faites avec `FRONT_PORT=8081`, car le port 8080 était
-déjà occupé sur le poste de test. Chez vous, utilisez le port indiqué dans
-votre `.env` (8080 par défaut).
+> déjà occupé sur le poste de test. Chez vous, utilisez le port indiqué dans
+> votre `.env` (8080 par défaut).
 
 ## 9. Comment ça marche (en 4 idées)
 

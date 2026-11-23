@@ -6,6 +6,17 @@ C'est ici que vous déposez vos preuves pour la remise.
 > dans le `README.md`). Vous pouvez les remplacer par les vôtres : gardez les
 > mêmes noms de fichiers.
 
+## Transparence sur les captures fournies
+
+Les trois captures « terminal » (`1-docker-compose-ps.png`, `3-curl.png` et
+`4-logs.png`) ont été générées à partir des **sorties réelles** des commandes,
+recopiées dans une image (fond sombre, police monospace). Ce ne sont donc pas
+des copies d'écran d'une fenêtre de terminal. Si votre enseignant exige une
+capture native, refaites-la avec l'outil de capture de votre système et
+écrasez le fichier en gardant le même nom.
+
+La capture `2-navigateur.png` est, elle, une vraie capture du navigateur.
+
 ## Noms de fichiers attendus
 
 | Fichier | Ce qu'il doit montrer |
